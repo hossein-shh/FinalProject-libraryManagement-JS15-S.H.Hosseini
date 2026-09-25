@@ -2,7 +2,6 @@ document.addEventListener("DOMContentLoaded", function() {
     if (!protectLoginPage()) {
         return;
     }
-
     const form = document.getElementById("loginForm");
     const emailInput = document.getElementById("email");
     const passwordInput = document.getElementById("password");
@@ -10,7 +9,6 @@ document.addEventListener("DOMContentLoaded", function() {
     const loginText = document.getElementById("loginText");
     const loginSpinner = document.getElementById("loginSpinner");
     const submitButton = form.querySelector('button[type="submit"]');
-
     form.addEventListener("submit", async function(event) {
         event.preventDefault();
         const email = emailInput.value.trim();

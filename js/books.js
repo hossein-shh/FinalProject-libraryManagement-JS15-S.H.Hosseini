@@ -130,7 +130,6 @@ document.addEventListener("DOMContentLoaded", async function() {
     });
     await loadBooksPage();
     window.addEventListener("pageshow", function() {
-        // هر بار برگشت به این صفحه، لیست را از سرور تازه کن
         loadBooksPage(true);
     });
 });

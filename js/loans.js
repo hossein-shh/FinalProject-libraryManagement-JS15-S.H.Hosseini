@@ -87,7 +87,6 @@ async function handleReturn(loanId, button) {
         await returnBook(loanId);
         markBooksDirty();
         showPageMessage("Book returned successfully.", "success");
-        // فقط جدول همین صفحه را تازه کن؛ هیچ هدایت صفحه‌ای انجام نشود
         await loadLoansPage();
     } catch (error) {
         if (error.status === 401) {
@@ -107,13 +106,10 @@ document.addEventListener("DOMContentLoaded", async function() {
     if (!protectPage()) {
         return;
     }
-
-    // جدول نمونه قالب را فوراً خالی کن تا دکمهٔ استاتیک قدیمی کلیک نشود
     const tbody = document.getElementById("loansTableBody");
     if (tbody) {
         tbody.innerHTML = "<tr><td colspan=\"5\" class=\"text-center\">Loading loans...</td></tr>";
     }
-
     try {
         await setupUserInfo();
     } catch (error) {
@@ -124,8 +120,6 @@ document.addEventListener("DOMContentLoaded", async function() {
         }
         showPageMessage(error.message || "Unable to load user information.", "error");
     }
-
-    // لیسنر در فاز capture تا قبل از هر رفتار دیگری اجرا شود
     document.addEventListener("click", function(event) {
         const button = event.target.closest(".return-btn");
         if (!button) {
