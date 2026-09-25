@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Loans - Library Management System</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">📚 Library Management</div>
+                <nav class="nav">
+                    <a href="dashboard.html">Dashboard</a>
+                    <a href="books.html">Browse Books</a>
+                    <a href="my-loans.html" class="active">My Loans</a>
+                    <a href="login.html">Logout</a>
+                </nav>
+                <div class="user-info">
+                    <div class="user-avatar">S</div>
+                    <span>Student Name</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <h1>My Loans</h1>
+            <p style="color: #666; margin-bottom: 2rem;">View and manage your borrowed books.</p>
+            
+
+            <!-- Loans Table -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Your Loans</h2>
+                    <span style="color: #666;" id="totalLoans">Total: 3 loans</span>
+                </div>
+                
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Book Title</th>
+                            <th>Author</th>
+                            <th>Loan Date</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="loansTableBody">
+                        <tr><td colspan="5" class="text-center">Loading loans...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Loan Statistics -->
+            <div class="grid grid-2">
+                <div class="card stat-card">
+                    <div class="stat-number" id="activeLoanCount">2</div>
+                    <div class="stat-label">Active Loans</div>
+                </div>
+                <div class="card stat-card">
+                    <div class="stat-number" id="returnedLoanCount">1</div>
+                    <div class="stat-label">Returned Books</div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+    <script defer src="js/api.js"></script><script defer src="js/auth.js"></script><script defer src="js/common.js"></script><script defer src="js/loans.js"></script></body>
+</html>

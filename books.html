@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Books - Library Management System</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">📚 Library Management</div>
+                <nav class="nav">
+                    <a href="dashboard.html">Dashboard</a>
+                    <a href="books.html" class="active">Browse Books</a>
+                    <a href="my-loans.html">My Loans</a>
+                    <a href="login.html">Logout</a>
+                </nav>
+                <div class="user-info">
+                    <div class="user-avatar">S</div>
+                    <span>Student Name</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <h1>Browse Books</h1>
+            <p style="color: #666; margin-bottom: 2rem;">Explore our collection and find your next read.</p>
+            
+
+            <!-- Books Grid -->
+            <div class="grid grid-3" id="booksGrid"></div>
+        </div>
+    </main>
+    <script defer src="js/api.js"></script><script defer src="js/auth.js"></script><script defer src="js/common.js"></script><script defer src="js/books.js"></script></body>
+</html>
