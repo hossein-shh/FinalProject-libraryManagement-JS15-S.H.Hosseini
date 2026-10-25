@@ -33,11 +33,41 @@ function renderBooks(books, container) {
 
 async function showBookDetails(bookId) {
     const response = await apiRequest("/books/" + encodeURIComponent(bookId));
-    const book = response && response.book ? response.book : response && response.data ? response.data : response;
+    let book = null;
+    if (response) {
+        if (response.book) {
+            book = response.book;
+        } else if (response.data && response.data.book) {
+            book = response.data.book;
+        } else if (response.data && typeof response.data === "object" && !Array.isArray(response.data)) {
+            book = response.data;
+        } else {
+            book = response;
+        }
+    }
+    book = book || {};
+    let categoryText = getBookCategory(book);
+    if (categoryText === "Uncategorized") {
+        try {
+            const list = await getBooksWithCache();
+            const fromList = list.find(function(item) {
+                return String(getBookId(item)) === String(bookId);
+            });
+            if (fromList) {
+                const fromListCategory = getBookCategory(fromList);
+                if (fromListCategory !== "Uncategorized") {
+                    categoryText = fromListCategory;
+                }
+                if (!getBookTitle(book) || getBookTitle(book) === "Untitled") {
+                    book = Object.assign({}, fromList, book);
+                }
+            }
+        } catch (e) {}
+    }
     const details = "Title: " + getBookTitle(book) +
         "\n\nAuthor: " + getBookAuthor(book) +
         "\n\nISBN: " + getBookIsbn(book) +
-        "\n\nCategory: " + getBookCategory(book) +
+        "\n\nCategory: " + categoryText +
         "\n\nPublication Year: " + getBookYear(book) +
         "\n\nTags: " + getBookTags(book) +
         "\n\nAvailable Copies: " + getAvailableCopies(book) +

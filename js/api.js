@@ -146,11 +146,27 @@ function getBookIsbn(book) {
 }
 
 function getBookCategory(book) {
-    const category = book.category || book.categoryName || book.category_name;
-    if (category && typeof category === "object") {
-        return category.name || category.title || category.label || category.categoryName || "Uncategorized";
+    if (!book || typeof book !== "object") {
+        return "Uncategorized";
     }
-    return category || "Uncategorized";
+    const category = book.category || book.categoryName || book.category_name || book.genre || book.Genre;
+    if (!category) {
+        return "Uncategorized";
+    }
+    if (typeof category === "string" || typeof category === "number") {
+        const text = String(category).trim();
+        return text || "Uncategorized";
+    }
+    if (typeof category === "object") {
+        const name = category.name || category.title || category.label ||
+            category.categoryName || category.category_name || category.slug ||
+            category.value || category.text;
+        if (name !== undefined && name !== null && String(name).trim() !== "") {
+            return String(name).trim();
+        }
+        return "Uncategorized";
+    }
+    return "Uncategorized";
 }
 
 function getBookYear(book) {
@@ -271,6 +287,7 @@ function showPageMessage(message, type) {
         }
     }
     showAlert(container, message, type || "error");
+    window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 async function getCurrentUser() {

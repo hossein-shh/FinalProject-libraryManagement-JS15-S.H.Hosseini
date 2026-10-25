@@ -5,14 +5,13 @@ document.addEventListener("DOMContentLoaded", async function() {
 
     const activeLoansElement = document.getElementById("activeLoans");
     const availableBooksElement = document.getElementById("availableBooks");
-
+    
     async function loadDashboardStats() {
         await setupUserInfo();
         const books = await getBooksFresh();
         const loans = await getMyLoans();
         const activeLoans = loans.filter(function(loan) {
             const status = getLoanStatus(loan).toLowerCase();
-            // کتاب هنوز دست کاربر است (فعال یا سررسیدشده)
             return status === "active" || status === "overdue";
         }).length;
         const availableBooks = books.filter(function(book) {
