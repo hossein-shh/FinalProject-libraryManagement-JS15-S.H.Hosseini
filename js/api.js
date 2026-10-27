@@ -232,8 +232,7 @@ function getLoanStatus(loan) {
     const loanDate = getLoanDate(loan);
     if (loanDate) {
         const dueDate = new Date(loanDate);
-        // dueDate.setDate(dueDate.getDate() + 14);
-        dueDate.setSeconds(dueDate.getSeconds() + 10);
+        dueDate.setDate(dueDate.getDate() + 14);
         if (Date.now() > dueDate.getTime()) {
             return "Overdue";
         }
