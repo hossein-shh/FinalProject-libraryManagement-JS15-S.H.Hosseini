@@ -221,6 +221,10 @@ function getLoanDate(loan) {
     return loan.loanDate || loan.loan_date || loan.borrowedAt || loan.borrowed_at || loan.createdAt || loan.created_at || "";
 }
 
+function getLoanDueDate(loan) {
+    return loan.dueDate || loan.due_date || loan.returnDate || loan.return_date || "";
+}
+
 function getLoanStatus(loan) {
     const status = String(loan.status || "").toLowerCase();
     if (status.includes("return") || loan.returned === true || loan.isReturned === true || loan.is_returned === true) {
@@ -229,12 +233,22 @@ function getLoanStatus(loan) {
     if (status.includes("overdue")) {
         return "Overdue";
     }
+    const serverDue = getLoanDueDate(loan);
+    if (serverDue) {
+        const due = new Date(serverDue);
+        if (!Number.isNaN(due.getTime()) && Date.now() > due.getTime()) {
+            return "Overdue";
+        }
+        return "Active";
+    }
     const loanDate = getLoanDate(loan);
     if (loanDate) {
         const dueDate = new Date(loanDate);
-        dueDate.setDate(dueDate.getDate() + 14);
-        if (Date.now() > dueDate.getTime()) {
-            return "Overdue";
+        if (!Number.isNaN(dueDate.getTime())) {
+            dueDate.setDate(dueDate.getDate() + 14);
+            if (Date.now() > dueDate.getTime()) {
+                return "Overdue";
+            }
         }
     }
     return "Active";
