@@ -64,15 +64,65 @@ async function showBookDetails(bookId) {
             }
         } catch (e) {}
     }
-    const details = "Title: " + getBookTitle(book) +
-        "\n\nAuthor: " + getBookAuthor(book) +
-        "\n\nISBN: " + getBookIsbn(book) +
-        "\n\nCategory: " + categoryText +
-        "\n\nPublication Year: " + getBookYear(book) +
-        "\n\nTags: " + getBookTags(book) +
-        "\n\nAvailable Copies: " + getAvailableCopies(book) +
-        "\n\nDescription: " + getBookDescription(book);
-    window.alert(details);
+    openBookDetailsModal(book, categoryText);
+}
+
+function openBookDetailsModal(book, categoryText) {
+    const modal = document.getElementById("bookDetailsModal");
+    const body = document.getElementById("bookModalBody");
+    const titleEl = document.getElementById("bookModalTitle");
+    if (!modal || !body) {
+        return;
+    }
+    if (titleEl) {
+        titleEl.textContent = getBookTitle(book);
+    }
+    body.innerHTML =
+        "<div class=\"detail-row\"><strong>Author:</strong> " + escapeHtml(getBookAuthor(book)) + "</div>" +
+        "<div class=\"detail-row\"><strong>ISBN:</strong> " + escapeHtml(getBookIsbn(book)) + "</div>" +
+        "<div class=\"detail-row\"><strong>Category:</strong> " + escapeHtml(categoryText) + "</div>" +
+        "<div class=\"detail-row\"><strong>Publication Year:</strong> " + escapeHtml(String(getBookYear(book))) + "</div>" +
+        "<div class=\"detail-row\"><strong>Tags:</strong> " + escapeHtml(getBookTags(book)) + "</div>" +
+        "<div class=\"detail-row\"><strong>Available Copies:</strong> " + escapeHtml(String(getAvailableCopies(book))) + "</div>" +
+        "<div class=\"detail-row\"><strong>Description:</strong> " + escapeHtml(getBookDescription(book)) + "</div>";
+    modal.classList.remove("hidden");
+    modal.setAttribute("aria-hidden", "false");
+}
+
+function closeBookDetailsModal() {
+    const modal = document.getElementById("bookDetailsModal");
+    if (!modal) {
+        return;
+    }
+    modal.classList.add("hidden");
+    modal.setAttribute("aria-hidden", "true");
+}
+
+function setupBookDetailsModal() {
+    const modal = document.getElementById("bookDetailsModal");
+    if (!modal || modal.dataset.ready === "1") {
+        return;
+    }
+    modal.dataset.ready = "1";
+    modal.addEventListener("click", function(event) {
+        const target = event.target;
+        if (
+            target === modal ||
+            target.classList.contains("modal-backdrop") ||
+            target.closest("[data-close-modal]")
+        ) {
+            if (target.closest(".modal-dialog") && !target.closest("[data-close-modal]")) {
+                return;
+            }
+            event.preventDefault();
+            closeBookDetailsModal();
+        }
+    });
+    document.addEventListener("keydown", function(event) {
+        if (event.key === "Escape" && !modal.classList.contains("hidden")) {
+            closeBookDetailsModal();
+        }
+    });
 }
 
 async function handleBorrow(bookId, button) {
@@ -128,6 +178,7 @@ document.addEventListener("DOMContentLoaded", async function() {
     if (!protectPage()) {
         return;
     }
+    setupBookDetailsModal();
     setupUserInfo().catch(function(error) {
         if (error.status !== 401) {
             showPageMessage(error.message || "Unable to load user information.", "error");
